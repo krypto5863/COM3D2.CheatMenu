@@ -6,4 +6,4 @@ A light and simple cheat menu to help obsolete MaidFiddler.
 2. Throw it in Bepinex/Plugins
 3. Profit
 
-Alternatively, just get it from CMI.
+Alternatively, just get it from [CMI](https://krypto5863.github.io/COM-Modular-Installer/).

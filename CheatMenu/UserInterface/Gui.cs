@@ -187,6 +187,7 @@ namespace CheatMenu.UserInterface
 				*/
 
 				GUILayout.BeginVertical(Sections);
+				maid.status.likability = UiToolbox.NumberField(maid.status.likability, "Favor", 0, int.MaxValue);
 				maid.status.baseMaxHp = UiToolbox.NumberField(maid.status.baseMaxHp, "Energy", 0, int.MaxValue);
 				maid.status.baseMaxMind = UiToolbox.NumberField(maid.status.baseMaxMind, "Mind", 0, int.MaxValue);
 				maid.status.baseMaxReason = UiToolbox.NumberField(maid.status.baseMaxReason, "Reason", 0, int.MaxValue);

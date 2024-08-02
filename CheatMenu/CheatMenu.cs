@@ -14,7 +14,7 @@ using UnityEngine;
 namespace CheatMenu
 {
 	//This is the metadata set for your plugin.
-	[BepInPlugin("CheatMenu", "CheatMenu", "1.1")]
+	[BepInPlugin("CheatMenu", "CheatMenu", "1.2")]
 	public class CheatMenu : BaseUnityPlugin
 	{
 		//static saving of the main instance. This makes it easier to run stuff like co-routines from static methods or accessing non-static vars.

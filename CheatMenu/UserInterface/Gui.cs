@@ -1,6 +1,8 @@
-﻿using PlayerStatus;
-using System;
+﻿using System.Runtime.Serialization;
+using MaidStatus;
 using UnityEngine;
+using Math = System.Math;
+using Status = PlayerStatus.Status;
 
 namespace CheatMenu.UserInterface
 {
@@ -125,6 +127,34 @@ namespace CheatMenu.UserInterface
 			GameMain.instance.CharacterMgr.status.clubGrade = UiToolbox.NumberField(GameMain.instance.CharacterMgr.status.clubGrade, "Club Grade", max: Status.ClubGradeMax);
 			GUILayout.EndHorizontal();
 
+			if (Trophy.commonIdManager != null && GUILayout.Button("Unlock All Trophies"))
+			{
+				UnlockAllTrophies();
+			}
+
+			if (GameMain.Instance.CharacterMgr.status.lockNTRPlay)
+			{
+				GUILayout.Label("NTR Blocked: Yes (can disable with event)");
+			}
+			else
+			{
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("NTR Blocked: No ಠ_ಠ");
+				if (GUILayout.Button("Block NTR"))
+				{
+					GameMain.Instance.CharacterMgr.status.lockNTRPlay = true;
+					try
+					{
+						DisplayFakeTrophy("A cuck no more");
+					}
+					catch
+					{
+						//Joke failed. Ignore.
+					}
+				}
+				GUILayout.EndHorizontal();
+			}
+
 			GUILayout.EndVertical();
 
 			GUILayout.BeginVertical(Sections2);
@@ -150,6 +180,18 @@ namespace CheatMenu.UserInterface
 				maid.status.lastName = UiToolbox.LabeledField("Last Name", maid.status.lastName);
 				maid.status.nickName = UiToolbox.LabeledField("Nickname", maid.status.nickName);
 				maid.status.isNickNameCall = GUILayout.Toggle(maid.status.isNickNameCall, "Use Nickname");
+				GUILayout.EndHorizontal();
+
+				GUILayout.BeginHorizontal(Sections);
+				GUILayout.Label("Trainee: " + (maid.status.studyRate > 500 ? "Yes" : "No" + (maid.status.contract == Contract.Trainee ? " (contract change next morning!)" : string.Empty)));
+				if (maid.status.studyRate > 500)
+				{
+					GUILayout.FlexibleSpace();
+					if (GUILayout.Button("Complete Training"))
+					{
+						maid.status.studyRate = 500;
+					}
+				}
 				GUILayout.EndHorizontal();
 
 				/*
@@ -181,8 +223,7 @@ namespace CheatMenu.UserInterface
 
 				/*
 				GUILayout.BeginVertical(Sections);
-				maid.status.baseTeachRate = NumberField(maid.status.baseTeachRate, "Teach Rate", 0, int.MaxValue);
-				maid.status.studyRate = NumberField(maid.status.studyRate, "Study Rate", 0, int.MaxValue);
+				//maid.status.baseTeachRate = UiToolbox.NumberField(maid.status.baseTeachRate, "Teach Rate", 0, int.MaxValue);
 				GUILayout.EndVertical();
 				*/
 
@@ -204,6 +245,45 @@ namespace CheatMenu.UserInterface
 			GUILayout.EndScrollView();
 
 			UiToolbox.ChkMouseClick(WindowRect, ref CheatMenu.DrawUi);
+		}
+
+		public static void UnlockAllTrophies()
+		{
+			var data = Trophy.GetAllDatas(true);
+
+			foreach (var trophyData in data)
+			{
+				GameMain.Instance.CharacterMgr.status.AddHaveTrophy(trophyData.id);
+			}
+		}
+
+		public static void DisplayFakeTrophy(string trophyText, string shopItem = "")
+		{
+			var gameObject = GameObject.Find("SystemUI Root/TrophyAchieveEffect");
+			if (gameObject == null)
+			{
+				return;
+			}
+
+			var component = gameObject.GetComponent<TrophyAchieveEffect>();
+			if (component == null)
+			{
+				return;
+			}
+
+			var trophy = FormatterServices.GetUninitializedObject(typeof(Trophy.Data)) as Trophy.Data;
+
+			if (trophy == null)
+			{
+				CheatMenu.PluginLogger.LogWarning("Trophy fail :(");
+				return;
+			}
+
+			typeof(Trophy.Data).GetField(nameof(Trophy.Data.rarity)).SetValue(trophy, 3);
+			typeof(Trophy.Data).GetField(nameof(Trophy.Data.name)).SetValue(trophy, trophyText);
+			typeof(Trophy.Data).GetField(nameof(Trophy.Data.effectDrawItemName)).SetValue(trophy, shopItem);
+
+			component.EffectStart(trophy);
 		}
 	}
 }

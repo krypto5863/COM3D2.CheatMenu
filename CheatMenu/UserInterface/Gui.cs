@@ -16,6 +16,12 @@ namespace CheatMenu.UserInterface
 		private static Rect _closeButton = new Rect(0, 0, 25, 15);
 		private static Vector2 _scrollPosition;
 
+		private static Texture2D normalTexture;
+		private static Texture2D hoverTexture;
+		private static Texture2D onNormalTexture;
+		private static Texture2D sectionsTexture;
+		private static Texture2D sections2Texture;
+
 		//internal static GUIStyle Separator;
 		internal static GUIStyle MainWindow;
 
@@ -48,37 +54,45 @@ namespace CheatMenu.UserInterface
 				};
 				*/
 
+				normalTexture = UiToolbox.MakeWindowTex(new Color(0, 0, 0, 0.05f), new Color(0, 0, 0, 0.5f));
+				hoverTexture = UiToolbox.MakeWindowTex(new Color(0.3f, 0.3f, 0.3f, 0.3f), new Color(0, 1, 1, 0.5f));
+				onNormalTexture = UiToolbox.MakeWindowTex(new Color(0.3f, 0.3f, 0.3f, 0.6f), new Color(0, 1, 1, 0.5f));
+
 				MainWindow = new GUIStyle(GUI.skin.window)
 				{
 					normal =
 					{
-						background = UiToolbox.MakeWindowTex(new Color(0, 0, 0, 0.05f), new Color(0, 0, 0, 0.5f)),
+						background = normalTexture,
 						textColor = new Color(1, 1, 1, 0.05f)
 					},
 					hover =
 					{
-						background = UiToolbox.MakeWindowTex(new Color(0.3f, 0.3f, 0.3f, 0.3f), new Color(0, 1, 1, 0.5f)),
+						background = hoverTexture,
 						textColor = new Color(1, 1, 1, 0.3f)
 					},
 					onNormal =
 					{
-						background = UiToolbox.MakeWindowTex(new Color(0.3f, 0.3f, 0.3f, 0.6f), new Color(0, 1, 1, 0.5f))
+						background = onNormalTexture
 					}
 				};
+
+				sectionsTexture = UiToolbox.MakeTex(2, 2, new Color(0, 0, 0, 0.3f));
 
 				Sections = new GUIStyle(GUI.skin.box)
 				{
 					normal =
 					{
-						background = UiToolbox.MakeTex(2, 2, new Color(0, 0, 0, 0.3f))
+						background = sectionsTexture
 					}
 				};
+
+				sections2Texture = UiToolbox.MakeTexWithRoundedCorner(new Color(0, 0, 0, 0.8f));
 
 				Sections2 = new GUIStyle(GUI.skin.box)
 				{
 					normal =
 					{
-						background = UiToolbox.MakeTexWithRoundedCorner(new Color(0, 0, 0, 0.8f))
+						background = sections2Texture
 					}
 				};
 
